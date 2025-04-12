@@ -36,3 +36,42 @@
     transform: rotate(360deg);
   }
 }
+
+/* Custom styles beyond Tailwind */
+.font-inter {
+  font-family: 'Inter', sans-serif;
+}
+
+/* Override default styles */
+body {
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Animations for modal */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from { transform: translateY(10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-animation {
+  animation: fade-in 0.3s ease-out, slide-up 0.3s ease-out;
+}
+
+/* Pulsing animation for the floating button */
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(255, 183, 77, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(255, 183, 77, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 183, 77, 0); }
+}
+
+.pulse-button {
+  animation: pulse 2s infinite;
+}
