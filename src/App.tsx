@@ -12,16 +12,26 @@ interface RecipeResponse {
   currentMealTime: string;
 }
 
+interface Recipe {
+  id: string;
+  title: string;
+  day: string;
+  mealTime: string;
+  ingredients: string[];
+  steps: string[];
+  nutritionalBenefits: string;
+}
+
 type MealTime = 'breakfast' | 'lunch' | 'snack' | 'dinner';
 
 function App() {
   const [showAlternates, setShowAlternates] = useState(false);
   const [currentDay, setCurrentDay] = useState<string>('');
   const [selectedMealTime, setSelectedMealTime] = useState<MealTime>('breakfast');
-  const [recipes, setRecipes] = useState<any[]>([]);
-  const [selectedRecipe, setSelectedRecipe] = useState<any>(null);
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [allSnackRecipes, setAllSnackRecipes] = useState<any[]>([]);
+  const [allSnackRecipes, setAllSnackRecipes] = useState<Recipe[]>([]);
 
   // Get current day and meal time on component mount
   useEffect(() => {
@@ -48,7 +58,7 @@ function App() {
         try {
           if (selectedMealTime === 'snack') {
             // For snacks, we get all snack recipes regardless of day
-            const snackRecipes = await getAlternates('Any', 'snack');
+            const snackRecipes = await getAlternates('Any', 'snack') as Recipe[];
             setAllSnackRecipes(snackRecipes || []);
             
             if (snackRecipes && snackRecipes.length > 0) {
@@ -62,7 +72,7 @@ function App() {
             }
           } else {
             // For other meal times, get recipes for the current day
-            const recipesData = await getAlternates(currentDay, selectedMealTime);
+            const recipesData = await getAlternates(currentDay, selectedMealTime) as Recipe[];
             setRecipes(recipesData || []);
             setSelectedRecipe(recipesData && recipesData.length > 0 ? recipesData[0] : null);
           }
@@ -83,7 +93,7 @@ function App() {
   };
 
   // Handle recipe selection
-  const handleSelectRecipe = (recipe: any) => {
+  const handleSelectRecipe = (recipe: Recipe) => {
     setSelectedRecipe(recipe);
   };
 

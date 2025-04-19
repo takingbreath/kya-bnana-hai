@@ -13,14 +13,13 @@ interface OnboardingContextType {
   completeOnboarding: () => Promise<void>;
 }
 
-// Default preferences
+// Default preferences - Updated to remove deprecated fields
 const defaultPreferences: UserPreferences = {
+  goals: [], // Added missing goals field initialization
   dietaryPreferences: [],
   cuisinePreferences: [],
-  cookingTime: [],
-  skillLevel: 'beginner',
-  allergies: [],
-  isOnboardingComplete: false
+  mealHabits: [], // Added missing mealHabits field initialization
+  hasCompletedOnboarding: false
 };
 
 const OnboardingContext = createContext<OnboardingContextType | undefined>(undefined);
@@ -73,12 +72,17 @@ export const OnboardingProvider: React.FC<OnboardingProviderProps> = ({ children
     try {
       // Save preferences to Firestore
       if (auth.currentUser) {
-        const updatedPreferences = {
-          ...preferences,
-          isOnboardingComplete: true
+        // Ensure the object being saved matches the UserPreferences interface strictly
+        const updatedPreferences: UserPreferences = {
+          goals: preferences.goals || [],
+          dietaryPreferences: preferences.dietaryPreferences || [],
+          cuisinePreferences: preferences.cuisinePreferences || [],
+          mealHabits: preferences.mealHabits || [],
+          hasCompletedOnboarding: true
         };
         await saveUserPreferences(auth.currentUser.uid, updatedPreferences);
-        setPreferences(updatedPreferences);
+        // Update local state with the cleaned object
+        setPreferences(updatedPreferences); 
         setIsComplete(true);
         localStorage.setItem('onboardingComplete', 'true');
       } else {

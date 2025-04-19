@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { logOut } from '../firebase/services';
+import { signOutUser } from '../firebase/services';
 
 const Header: React.FC = () => {
   const { currentUser, isAuthenticated } = useAuth();
@@ -10,7 +10,7 @@ const Header: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      await logOut();
+      await signOutUser();
       navigate('/login');
     } catch (error) {
       console.error('Error logging out:', error);

@@ -6,7 +6,7 @@ module.exports = {
       loaderOptions: (postcssLoaderOptions) => {
         postcssLoaderOptions.postcssOptions = {
           plugins: [
-            require('tailwindcss'),
+            require('@tailwindcss/postcss7-compat'),
             require('autoprefixer'),
           ],
         };
